@@ -14,10 +14,10 @@ Cascade pipeline; a small CNN is used only as a supplementary verifier.
     source .venv/bin/activate        # Windows: .venv\Scripts\activate
     pip install -r requirements.txt
 
-## Download CNN model (required)
-Place these two files into `models/`:
-  - opencv_face_detector_uint8.pb
-  - opencv_face_detector.pbtxt
+## CNN model
+The pretrained SSD weights live in `models/`:
+  - `opencv_face_detector_uint8.pb`
+  - `opencv_face_detector.pbtxt`
 
 Source: https://github.com/opencv/opencv/tree/master/samples/dnn
 
