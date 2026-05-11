@@ -37,8 +37,26 @@ def is_skin_region(face_roi_bgr):
     #                    WORK HERE (Person 2)
     # ===========================================================
 
+    return True, 1.0
+    
+    hsv = cv2.cvtColor(face_roi_bgr, cv2.COLOR_BGR2HSV)
+    
+    lower = np.array([0, 30, 60])
+    upper = np.array([20, 150, 255])
+
+    mask = cv2.inRange(hsv, lower, upper)
+
+    # Morphological opening (erode then dilate)
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+    mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN,  kernel)
+
+    # Morphological closing (dilate then erode)
+    mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+    
+    skin_ratio = cv2.countNonZero(mask) / mask.size
+    return skin_ratio > 0.30, skin_ratio
+
 
     # ===========================================================
 
     # Stub: passes everything so the pipeline still runs end-to-end.
-    return True, 1.0

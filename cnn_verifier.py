@@ -36,21 +36,18 @@ def verify_face_cnn(face_roi_bgr, conf_threshold=0.5):
     """
     Returns (passed: bool, confidence: float).
 
-    Implementation steps (Person 2):
-        1. blob = cv2.dnn.blobFromImage(face_roi_bgr, 1.0, (300, 300),
-                                         [104, 117, 123], swapRB=False, crop=False)
-        2. net = _load_net()
-           net.setInput(blob)
-           detections = net.forward()    # shape (1, 1, N, 7)
-        3. Find max confidence in detections[0, 0, :, 2].
-        4. return (max_conf >= conf_threshold, float(max_conf))
     """
-    # ===========================================================
-    #                    WORK HERE (Person 2)
-    # ===========================================================
 
-
-    # ===========================================================
-
-    # Stub: passes everything so the pipeline still runs end-to-end.
-    return True, 1.0
+    blob = cv2.dnn.blobFromImage(face_roi_bgr, 1.0, (300, 300),
+                                         [104, 117, 123], swapRB=False, crop=False)
+    
+    net = _load_net()
+    net.setInput(blob)
+    detections = net.forward()
+    max_conf = 0.0
+    for i in range(detections.shape[2]):
+        conf = detections[0, 0, i, 2]
+        if conf > max_conf:
+            max_conf = conf
+    
+    return max_conf >= conf_threshold, float(max_conf)
