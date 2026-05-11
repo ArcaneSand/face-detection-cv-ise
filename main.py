@@ -1,14 +1,5 @@
 """
-main.py — Real-time face detection demo.
-
-Run:
-    python main.py
-
-Press 'q' to quit.
-
-Pipeline (per frame):
-    capture -> preprocess -> Haar face detect -> for each face:
-        eye check -> skin check -> CNN check -> draw box if all pass
+Real-time face detection demo. Run `python main.py`, press q to quit.
 """
 
 import time
@@ -40,35 +31,27 @@ def main():
         if not ok:
             break
 
-        # 1) Preprocess: gray + blur + CLAHE
         gray = detector.preprocess(frame)
-
-        # 2) Haar face detection
         candidate_faces = detector.detect_faces(gray)
 
-        # 3) Per-face verification
         for (x, y, w, h) in candidate_faces:
             face_gray = gray[y:y + h, x:x + w]
             face_bgr  = frame[y:y + h, x:x + w]
 
-            # 3a) Eye check
             eyes = detector.detect_eyes(face_gray)
             if len(eyes) < 1:
                 continue
 
-            # 3b) Skin color check (Person 2 implements)
             skin_ok, _ = skin_validator.is_skin_region(face_bgr)
             if not skin_ok:
                 continue
 
-            # 3c) CNN supplementary verifier (Person 2 implements)
             cnn_ok, _ = cnn_verifier.verify_face_cnn(face_bgr)
             if not cnn_ok:
                 continue
 
             draw_box(frame, x, y, w, h)
 
-        # FPS overlay
         now = time.time()
         fps = 1.0 / (now - prev_time) if now > prev_time else 0.0
         prev_time = now
