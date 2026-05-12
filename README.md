@@ -25,6 +25,19 @@ Source: https://github.com/opencv/opencv/tree/master/samples/dnn
     python main.py
 Press `q` to quit.
 
+## Evaluate
+
+Run the pipeline on the first 300 images of the WIDER FACE validation
+split and report Precision / Recall / F1 at IoU >= 0.5. The dataset is
+pulled from the Hugging Face Hub (cached under `~/.cache/huggingface/`)
+on first run; no manual download is required.
+
+    python evaluate.py
+
+Prints `TP / FP / FN / Precision / Recall / F1`. Five qualitative
+example overlays (TP green / FP red / FN yellow) are written to
+`wider_examples/`.
+
 ## Pipeline
 
 Each webcam frame passes through six stages, listed below with the
